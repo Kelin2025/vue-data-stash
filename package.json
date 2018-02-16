@@ -1,0 +1,9 @@
+{
+  "name": "vue-data-stash",
+  "version": "0.1.0",
+  "description": "Save the component data for rainy day",
+  "main": "index.js",
+  "repository": "git@github.com:Kelin2025/vue-data-stash.git",
+  "author": "Kelin2025 <kelin2025@yandex.ru>",
+  "license": "MIT"
+}
