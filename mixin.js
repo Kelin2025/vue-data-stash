@@ -1,37 +1,62 @@
-import EventsBus from 'nanoevents'
-
-const bus = new EventsBus()
-const components = []
+const components = {}
 
 const pick = keys => obj =>
   keys.reduce((res, key) => ({ ...res, [key]: obj[key] }), {})
 
-const save = comp => {
+const stashName = comp => `stash:${comp.$options.name}`
+
+const pushComponent = comp => {
+  const name = comp.$options.name
+  if (!components[name]) components[name] = [comp]
+  else components[name].push(comp)
+  comp._stashWatchers = Object.keys(comp.$options.stash).map(k =>
+    comp.$watch(k, (val, oldVal) => update(name, k, val), {
+      deep: true
+    })
+  )
+}
+
+const update = (componentName, k, val) => {
+  components[componentName].forEach(c => {
+    c[k] = val
+  })
+}
+
+const saveStash = comp => {
   localStorage.setItem(
-    `stash-${comp.$options.name}`,
+    stashName(comp),
     JSON.stringify(pick(Object.keys(comp.$options.stash))(comp))
   )
+  removeComponent(comp)
+}
+
+const removeComponent = comp => {
+  comp._stashWatchers.forEach(unwatch => unwatch())
+  const idx = components[comp.$options.name].indexOf(comp)
+  if (idx > -1) {
+    components[comp.$options.name].splice(idx, 1)
+  }
 }
 
 export default {
   data() {
     if (!this.$options.stash) return {}
-    components.push(this)
-    const ls = localStorage.getItem(`stash-${this.$options.name}`)
+    const ls = localStorage.getItem(stashName(this))
     const res = ls && ls !== '{}' ? JSON.parse(ls) : this.$options.stash
     return { ...res }
   },
   created() {
-    this._stashWatchers = Object.keys(this.$options.stash).map(k =>
-      this.$watch(k, val => bus.emit(`stash:${this.$options.name}`, k, val))
-    )
-    this._stashListener = bus.on(`stash:${this.$options.name}`, (k, val) => {
-      this[k] = val
-    })
+    if (!this.$options.stash) return
+    pushComponent(this)
   },
   beforeDestroy() {
-    this._stashWatchers.forEach(unwatch => unwatch())
-    this._stashListener()
-    save(this)
+    if (!this.$options.stash) return
+    saveStash(this)
   }
 }
+
+window.addEventListener('unload', e => {
+  ;[].concat(...Object.values(components)).forEach(saveStash)
+  e.preventDefault()
+  return false
+})

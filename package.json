@@ -6,9 +6,6 @@
   "repository": "git@github.com:Kelin2025/vue-data-stash.git",
   "author": "Kelin2025 <kelin2025@yandex.ru>",
   "license": "MIT",
-  "dependencies": {
-    "nanoevents": "^1.0.2"
-  },
   "scripts": {
     "lint": "eslint --fix *.js"
   },
