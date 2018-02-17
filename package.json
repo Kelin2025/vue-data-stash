@@ -5,5 +5,8 @@
   "main": "index.js",
   "repository": "git@github.com:Kelin2025/vue-data-stash.git",
   "author": "Kelin2025 <kelin2025@yandex.ru>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "nanoevents": "^1.0.2"
+  }
 }
