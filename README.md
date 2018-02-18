@@ -10,6 +10,10 @@ This small mixin allows you to define _stashable_ data in your components i.e. d
 
 I'm bored to write `localStorage.setItem` for every time I need to save some data.
 
+## When to use?
+
+See [this](https://medium.com/@kelin2025/components-stash-f2e14603a874)
+
 ## Install
 
 Install via NPM:
