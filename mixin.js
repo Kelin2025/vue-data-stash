@@ -27,10 +27,6 @@ const saveStash = comp => {
     stashName(comp),
     JSON.stringify(pick(Object.keys(comp.$options.stash))(comp))
   )
-  removeComponent(comp)
-}
-
-const removeComponent = comp => {
   comp._stashWatchers.forEach(unwatch => unwatch())
   const idx = components[comp.$options.name].indexOf(comp)
   if (idx > -1) {
@@ -41,6 +37,9 @@ const removeComponent = comp => {
 export default {
   data() {
     if (!this.$options.stash) return {}
+    if (typeof this.$options.stash === 'function') {
+      this.$options.stash = this.$options.stash()
+    }
     const ls = localStorage.getItem(stashName(this))
     const res = ls && ls !== '{}' ? JSON.parse(ls) : this.$options.stash
     return { ...res }
