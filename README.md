@@ -12,7 +12,7 @@ I'm bored to write `localStorage.setItem` for every time I need to save some dat
 
 ## When to use?
 
-See [this](https://medium.com/@kelin2025/components-stash-f2e14603a874)
+See [**this**](https://medium.com/@kelin2025/components-stash-f2e14603a874)
 
 ## Install
 
